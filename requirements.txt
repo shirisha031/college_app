@@ -10,8 +10,8 @@ cffi==1.17.1
 charset-normalizer==3.4.2
 colorama==0.4.6
 cssselect2==0.8.0
-Django<5.0
-
+Django==4.2.11
+numpy==1.26.4
 django-extensions==3.2.3
 et_xmlfile==2.0.0
 fonttools==4.56.0
@@ -22,7 +22,6 @@ idna==3.10
 iniconfig==2.1.0
 multidict==6.4.3
 mysqlclient==2.2.7
-numpy==2.2.4
 openpyxl==3.1.5
 packaging==24.2
 pandas==2.2.3
