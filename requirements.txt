@@ -10,7 +10,8 @@ cffi==1.17.1
 charset-normalizer==3.4.2
 colorama==0.4.6
 cssselect2==0.8.0
-Django==5.0.4
+Django<5.0
+
 django-extensions==3.2.3
 et_xmlfile==2.0.0
 fonttools==4.56.0
