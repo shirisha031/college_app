@@ -1,0 +1,314 @@
+{% extends 'master/layout.html' %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .student-data-container {
+        max-width: 976px;
+        margin: 50px auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dropdown-menu {
+        padding: 0px 2px;
+        border: 3px;
+    }
+
+    .dropdown-item {
+        font-weight: 400;
+        padding: 2px 0px;
+        cursor: pointer;
+        font-size: 11px;
+        width: 85%;
+    }
+
+    .dropdown-item {
+        display: block;
+        width: 85%;
+        clear: both;
+        font-weight: 400;
+        color: #212529;
+        text-align: inherit;
+        white-space: nowrap;
+        background-color: transparent;
+        border: 0;
+    }
+
+        .dropdown-item:hover {
+            background-color: #f0f8ff;
+        }
+
+    .btn.btn-upload {
+        background-color: #4b79aa !important;
+        border-radius: 8px;
+        padding: 1px 10px !important;
+        font-size: 10px !important;
+        border: none;
+    }
+
+    element.style {
+        position: absolute;
+        transform: translate3d(0px, 28px, 0px);
+        top: -1px;
+        left: 0px;
+        will-change: transform;
+        padding: 0px;
+        border: 3px;
+    }
+
+    .btn-upload:hover {
+        background-color: #0b54a4;
+    }
+
+    h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #333;
+        padding: 0px;
+        text-align: center;
+    }
+
+    .no-records {
+        text-align: center;
+        font-size: 18px;
+        color: #6c757d;
+        margin-top: 20px;
+    }
+
+    .form-group input[type="file"] {
+        padding: 4px;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        font-size: 9px;
+    }
+
+        .form-group input[type="file"]:hover {
+            border-color: #007bff;
+        }
+
+    .form-group label {
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .main-area {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    .sidebar {
+        width: 200px;
+        height: 100vh;
+        background: linear-gradient(135deg, #ff00cc, #3333ff);
+        color: white;
+        padding-top: 0px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+    .topbar {
+        background: linear-gradient(135deg, #ff00cc, #3333ff);
+        padding: 12px 12px;
+        color: white;
+        width: calc(100% - 200px);
+        position: fixed;
+        top: 0;
+        left: 200px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        z-index: 1000;
+    }
+
+        .topbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 0 -24px;
+            white-space: nowrap;
+        }
+
+            .topbar a:hover {
+                text-decoration: underline;
+            }
+
+    .btn:not(:disabled):not(.disabled):not(.btn-upload) {
+        cursor: pointer;
+        padding: 0px;
+        background-color: #126eb4;
+        font-size: 16px;
+    }
+
+    .tab-card {
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        background: #ffffff;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table-bordered thead th {
+        border-bottom-width: 1px;
+        font-size: 12px;
+        padding: 1px;
+        background-color: #126eb4;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .table-bordered td {
+        border: 1px solid #dee2e6;
+        font-size: 9px;
+        padding: 0px;
+        text-align: center;
+    }
+
+    .content {
+        padding: 0px 26px 18px;
+    }
+</style>
+
+<div class="student-data-container">
+    <h2 class="text-center mb-4">Student Data Management</h2>
+
+    <!-- Dropdown Menu for Student -->
+    <div class="dropdown mb-3">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="studentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Student Options
+        </button>
+        <div class="dropdown-menu" aria-labelledby="studentDropdown">
+            <a class="dropdown-item" href="#upload">Upload Excel File</a>
+            <a class="dropdown-item" href="#data">View Student Records</a>
+        </div>
+    </div>
+
+    <!-- Upload Excel File Section -->
+    <div id="upload" class="tab-card mt-4 section-pane" style="display: none;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="file">Select Excel File:</label>
+                {{ upload_form.file }}
+                <button type="submit" name="upload_submit" class="btn btn-upload">Upload</button>
+            </div>
+        </form>
+
+        <h4 class="mt-4">Uploaded Files</h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Uploaded At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in files %}
+                <tr>
+                    <td>{{ f.file.name }}</td>
+                    <td>{{ f.uploaded_at }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="2" class="no-records">No files uploaded yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- View Student Records Section -->
+    <div id="data" class="tab-card mt-4 section-pane" style="display: none;">
+        <h4>Saved Student Records</h4>
+        {% if table_data %}
+        <table class="table table-bordered table-hover table-sm">
+            <thead>
+                <tr>
+                    {% for key in table_data.0 %}
+                    <th>{{ key|capfirst }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_data %}
+                <tr>
+                    {% for value in row.values %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-records">No student records to display.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Script to handle dropdown switching -->
+<script>
+    $(document).ready(function () {
+        // Hide all panes initially
+        $('.section-pane').hide();
+
+        // Optionally show one default section
+        $('#upload').show();
+
+        // Dropdown click navigation
+        $('.dropdown-item').click(function (e) {
+            e.preventDefault();
+
+            var target = $(this).attr('href'); // e.g., #upload
+            $('.section-pane').hide(); // Hide all
+            $(target).show();         // Show selected
+
+            // Scroll to it
+            $('html, body').animate({
+                scrollTop: $(target).offset().top - 60
+            }, 500);
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Hide all panes initially
+        $('.section-pane').hide();
+
+        // Dropdown click navigation
+        $('.dropdown-item').click(function (e) {
+            e.preventDefault();
+
+            var target = $(this).attr('href'); // e.g., #upload or #data
+            $('.section-pane').hide();         // Hide all
+            $(target).show();                  // Show selected
+
+            // Scroll to selected section
+            $('html, body').animate({
+                scrollTop: $(target).offset().top - 60
+            }, 500);
+        });
+    });
+</script>
+
+{% endblock %}

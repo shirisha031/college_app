@@ -1,0 +1,92 @@
+<!-- master/templates/bare.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Login{% endblock %}</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff00cc, #3333ff);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-wrapper {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background-color: #ffffff;
+            padding: 34px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 22%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .login-box h2 {
+                margin-bottom: 30px;
+                font-weight: 600;
+                color: #333;
+                text-align: center;
+            }
+
+            .login-box form {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .login-box input {
+                width: 100%;
+                max-width: 170px;
+                margin-bottom: 20px;
+                padding: 7px 9px;
+                font-size: 16px;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+            }
+
+            .login-box button {
+                width: 36%;
+                max-width: 300px;
+                padding: 8px;
+                background: linear-gradient(135deg, #ff00cc, #3333ff);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+                .login-box button:hover {
+                    background-color: #0056b3;
+                }
+
+        .alert {
+            font-size: 14px;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            color: red;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-box">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

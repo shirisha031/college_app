@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+ 
+# Virtual environments
+env/
+venv/
+ 
+# Environment file
+.env
+ 
+# Logs
+*.log
+ 
+# IDEs
+.vs/
+
+#uploaded files
+/excel_uploads/

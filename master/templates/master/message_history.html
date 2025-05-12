@@ -1,0 +1,188 @@
+﻿{% extends 'master/layout.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .student-data-container {
+        max-width: 976px;
+        margin: 50px auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+    }
+    .tab-card {
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        background: #ffffff;
+        padding: 11px;
+        margin-top: 20px;
+    }
+
+    table {
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    .table thead {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        padding: 2px;
+        font-size: 10px;
+    }
+
+    th {
+        font-size: 13px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+        padding: 3px 11px;
+        font-size: 10px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .filter-form label {
+        margin-right: 5px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .filter-form select {
+        margin-right: 15px;
+        font-size: 9px;
+        padding: 1px;
+    }
+
+    h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        text-align: center;
+    }
+    .content {
+        padding: 13px 26px 18px; /* top padding added to avoid content under topbar */
+    }
+
+    .sidebar {
+        width: 200px;
+        height: 100vh;
+        background: linear-gradient(135deg, #ff00cc, #3333ff);
+        color: white;
+        padding-top: 0px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 7px 8px;
+            display: block;
+            font-weight: 500;
+        }
+</style>
+
+<div class="student-data-container">
+    <h2>Sent Messages</h2>
+
+    <div class="tab-card">
+        <!-- Filter Form -->
+        <form method="get" class="form-inline filter-form mb-3 justify-content-center">
+            <label>Channel:</label>
+            <select name="channel" class="form-control mx-2">
+                <option value="">All</option>
+                <option value="sms" {% if channel_filter == 'sms' %}selected{% endif %}>SMS</option>
+                <option value="whatsapp" {% if channel_filter == 'whatsapp' %}selected{% endif %}>WhatsApp</option>
+            </select>
+
+            <label>Status:</label>
+            <select name="status" class="form-control mx-2">
+                <option value="">All</option>
+                <option value="delivered" {% if status_filter == 'delivered' %}selected{% endif %}>Delivered</option>
+                <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="failed" {% if status_filter == 'failed' %}selected{% endif %}>Failed</option>
+            </select>
+            <label>Department:</label>
+            <select name="department" class="form-control mx-2">
+                <option value="">All</option>
+                {% for dept in departments %}
+                <option value="{{ dept }}" {% if department_filter == dept %}selected{% endif %}>{{ dept }}</option>
+                {% endfor %}
+            </select>
+
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <!-- Messages Table -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Department</th>
+                    <th>student</th>
+                    <th>phone no</th>
+                    <th>Sent Via</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in messages %}
+                {% for g in msg.guardians %}
+                <tr>
+                    <td>{{ msg.subject }}</td>
+                    <td>{{ msg.department }}</td>
+                    <td>{{ g.student }}</td>
+                    <td>{{ g.phone }}</td>
+                    <td>
+                        {% if msg.send_sms %}SMS {% endif %}
+                        {% if msg.send_whatsapp %}WhatsApp{% endif %}
+                    </td>
+                    <td>{{ msg.sent_at|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        {% if msg.status_display == "Delivered" %}
+                        <span class="text-success">{{ msg.status_display }}</span>
+                        {% elif msg.status_display == "Failed" %}
+                        <span class="text-danger">{{ msg.status_display }}</span>
+                        {% else %}
+                        <span class="text-warning">{{ msg.status_display }}</span>
+                        {% endif %}
+                    </td>
+
+
+                    <td><!-- Action buttons if any --></td>
+                </tr>
+                {% endfor %}
+                {% empty %}
+                <tr><td colspan="8" class="text-center">No messages found.</td></tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+{% endblock %}
