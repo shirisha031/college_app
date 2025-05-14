@@ -77,5 +77,6 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'college-alert-app'
-          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+
           
